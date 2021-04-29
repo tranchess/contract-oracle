@@ -23,10 +23,10 @@ contract TwapOracle is ITwapOracle, Ownable {
     uint256 private constant PRICE_UNIT = 1e12;
     uint256 private constant PRICE_MASK = 0xffffffffffffffff;
 
-    address public primarySource;
-    address public secondarySource;
+    address public immutable primarySource;
+    address public immutable secondarySource;
+    uint256 private immutable _startTimestamp;
     string public symbol;
-    uint256 private _startTimestamp;
 
     uint256 private _lastPrimaryMessageCount;
     uint256 private _lastSecondaryTimestamp;
