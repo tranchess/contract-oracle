@@ -55,7 +55,7 @@ contract TwapOracle is ITwapOracle, Ownable {
     /// @param timestamp End Timestamp in seconds of the epoch
     /// @return TWAP (18 decimal places) in the epoch, or zero if the epoch is not initialized yet
     ///         or can still be updated with more messages from the same source.
-    function getTwap(uint256 timestamp) public view override returns (uint256) {
+    function getTwap(uint256 timestamp) external view override returns (uint256) {
         // Check whether the stored price can be updated in the future
         if (
             // Case 1: it can still be updated by more messages from the primary source
