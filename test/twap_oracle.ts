@@ -370,7 +370,7 @@ describe("TwapOracle", function () {
             incompleteMorePrices[BATCH_SIZE - 4] = BigNumber.from(0);
         });
 
-        describe("Intialized by primary source", function () {
+        describe("Initialized by primary source", function () {
             beforeEach(async function () {
                 advanceBlockAtTime(existingEpoch);
                 await callPrimary(existingEpoch, incompletePrices);
@@ -417,7 +417,7 @@ describe("TwapOracle", function () {
             });
         });
 
-        describe("Intialized by secondary source", function () {
+        describe("Initialized by secondary source", function () {
             beforeEach(async function () {
                 advanceBlockAtTime(existingEpoch + SECONDARY_SOURCE_DELAY);
                 await callSecondary(existingEpoch, incompletePrices);
