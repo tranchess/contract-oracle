@@ -23,6 +23,10 @@ contract TwapOracle is ITwapOracle, Ownable {
     uint256 private constant PRICE_UNIT = 1e12;
     uint256 private constant PRICE_MASK = 0xffffffffffffffff;
 
+    enum UpdateType {PRIMARY, SECONDARY, OWNER}
+
+    event Update(uint256 timestamp, uint256 price, UpdateType updateType);
+
     address public immutable primarySource;
     address public immutable secondarySource;
     uint256 private immutable _startTimestamp;
