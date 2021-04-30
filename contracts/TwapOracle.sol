@@ -72,6 +72,45 @@ contract TwapOracle is ITwapOracle, Ownable {
         }
     }
 
+    /// @notice Return minimum acceptable message count from the primary source
+    ///         to update a given epoch.
+    /// @param timestamp End timestamp in seconds of the epoch to update
+    /// @return Minimum acceptable message count, or `MESSAGE_BATCH_SIZE + 1` if the epoch
+    ///         cannot be updated now
+    function minPrimaryMessageCountToUpdate(uint256 timestamp) external view returns (uint256) {
+        if (_prices[timestamp] != 0) {
+            if (timestamp > block.timestamp - PUBLISHING_DELAY) {
+                return lastPrimaryMessageCount + 1;
+            } else {
+                return MESSAGE_BATCH_SIZE + 1;
+            }
+        } else {
+            return 1;
+        }
+    }
+
+    /// @notice Return minimum acceptable message count from the secondary source
+    ///         to update a given epoch.
+    /// @param timestamp End timestamp in seconds of the epoch to update
+    /// @return Minimum acceptable message count, or `MESSAGE_BATCH_SIZE + 1` if the epoch
+    ///         cannot be updated now
+    function minSecondaryMessageCountToUpdate(uint256 timestamp) external view returns (uint256) {
+        if (timestamp > block.timestamp - SECONDARY_SOURCE_DELAY || timestamp <= _startTimestamp) {
+            return MESSAGE_BATCH_SIZE + 1;
+        } else if (_prices[timestamp] != 0) {
+            if (
+                timestamp == lastSecondaryTimestamp &&
+                timestamp > block.timestamp - SECONDARY_SOURCE_DELAY - PUBLISHING_DELAY
+            ) {
+                return lastSecondaryMessageCount + 1;
+            } else {
+                return MESSAGE_BATCH_SIZE + 1;
+            }
+        } else {
+            return 1;
+        }
+    }
+
     /// @notice Submit prices in a epoch that are signed by the primary source.
     /// @param timestamp End timestamp in seconds of the epoch
     /// @param priceList A list of prices (6 decimal places) in messages signed by the source,
